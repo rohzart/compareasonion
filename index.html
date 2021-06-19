@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Compareasonion</title>
+    <style>
+        .columns{
+            display: flex;
+        }
+        .columns > div{
+            width: 50%;
+        }
+        img{
+            width: 100%;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="target"></div>
+    <script>
+        let loadDoc = function (target) {
+
+            let UIblock = document.getElementById(target);
+
+            let buildUI = function (key, records) {
+                let block = document.createElement('div');
+
+                let title = document.createElement('h1');
+                let title_text = document.createTextNode(key);
+                title.appendChild(title_text);
+                block.appendChild(title);
+
+                let recordblock = document.createElement('div');
+                recordblock.className = 'columns';
+                records.forEach((item)=>{
+                    let imageblock = document.createElement('div');
+                    if(item.error){
+                        let error = document.createTextNode(item.error);
+                        imageblock.appendChild(error);
+                        recordblock.appendChild(imageblock);
+                        return;    
+                    }
+                    let image = document.createElement('img');
+                    image.src = item.image_path;
+                    image.alt = item.domain;
+                    
+                    imageblock.appendChild(image);
+                    recordblock.appendChild(imageblock);
+                });
+                block.appendChild(recordblock);
+
+                UIblock.appendChild(block);
+            }
+
+            fetch('/output/records.json')
+                .then(response => response.json())
+                .then(records => Object.keys(records).forEach((record) => {
+                    buildUI(record, records[record])
+                }));
+        }
+
+        loadDoc("target");
+    </script>
+</body>
+
+</html>
