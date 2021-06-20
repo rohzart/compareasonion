@@ -7,13 +7,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Compareasonion</title>
     <style>
-        .columns{
+        .columns {
             display: flex;
         }
-        .columns > div{
+
+        .columns>div {
             width: 50%;
         }
-        img{
+
+        img {
             width: 100%;
         }
     </style>
@@ -36,19 +38,20 @@
 
                 let recordblock = document.createElement('div');
                 recordblock.className = 'columns';
-                records.forEach((item)=>{
+                records.forEach((item) => {
                     let imageblock = document.createElement('div');
-                    if(item.error){
+                    if (item.error) {
                         let error = document.createTextNode(item.error);
                         imageblock.appendChild(error);
                         recordblock.appendChild(imageblock);
-                        return;    
+                        // return;
                     }
-                    let image = document.createElement('img');
-                    image.src = item.image_path;
-                    image.alt = item.domain;
-                    
-                    imageblock.appendChild(image);
+                    if (item.image_path) {
+                        let image = document.createElement('img');
+                        image.src = item.image_path;
+                        image.alt = item.url;
+                        imageblock.appendChild(image);
+                    }
                     recordblock.appendChild(imageblock);
                 });
                 block.appendChild(recordblock);

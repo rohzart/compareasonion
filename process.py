@@ -3,8 +3,8 @@ import json
 from urllib.parse import urlparse
 import os
 
-with open('compareasonion.config.json', 'r') as fp:
-    config = json.load(fp)
+with open('compareasonion.config.json', 'r') as cf:
+    config = json.load(cf)
 
 options = config["imgkit"]["options"]
 # additional options: 'width': 400, 'disable-smart-width': ''
@@ -37,27 +37,33 @@ for page_name in records:
         if not domain in alloweddomains:
             error = f'error: invalid domain: {domain}'
         if error == '':
-            # todo: if result.netloc is not included in allowed domains return skip generation
             if all([result.scheme, result.netloc, result.path]):
                 counter = counter + 1
                 page_name = page_name.replace(' ', '_')
-                file_name = f'/{config["outputdir"]}/{page_name}_{str(counter)}.png'
-                if not os.path.exists(file_name):
+                image_path = f'{config["outputdir"]}/{page_name}_{str(counter)}.png'
+                if os.path.exists(image_path):
+                    print('image exists')
+                else:
                     try:
-                        imgkit.from_url(url, file_name, options=options, config=imgkitconfig)
-                        image_path = file_name
+                        print(url)
+                        imgkit.from_url(url, image_path, options=options, config=imgkitconfig)
                     except Exception as e:
-                        if os.path.exists(file_name):
-                            os.remove(file_name)
-                        error = f'error: imgkit > {e}'
+                        # if os.path.exists(image_path):
+                        #     os.remove(image_path)
+                        #     print('error occurred, image removed')
+                        error = f'error: imgkit processing {url} > {e}'
             else:
-                error = 'error: invalid image url'
+                error = f'error: invalid url: {url}'
 
         urls_json.append(
-            {"domain": domain, "image_path": image_path, "error": error})
+            {"url": url, "image_path": image_path, "error": error})
     records_json[page_name] = urls_json
 
 with open(config["outputjsonpath"], 'w') as outfile:
     json.dump(records_json, outfile)
+
+cf.close()
+fp.close()
+outfile.close()
 
 print('---OVER---')
