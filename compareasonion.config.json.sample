@@ -1,0 +1,17 @@
+{
+    "alloweddomains":[
+        "***.com",
+        "***.com"
+    ],
+    "inputfilepath":"data/urls.json",
+    "outputdir": "output",
+    "outputjsonpath": "output/records.json",
+    "imgkit": {
+        "wkhtmltoimagepath": "C:\\Program Files\\wkhtmltopdf\\bin\\wkhtmltoimage.exe",
+        "options": {
+            "quality": 80,
+            "quiet": "",
+            "format": "png"
+        }
+    }
+}
