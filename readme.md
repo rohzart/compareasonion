@@ -1,5 +1,7 @@
 # Docs
 
+Save "screenshots" of urls to compare them all at once!
+
 ## Install
 
 ### wkhtmltopdf
